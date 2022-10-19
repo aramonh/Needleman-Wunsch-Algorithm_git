@@ -19,6 +19,9 @@
 #include <map>
 #include <complex>
 
+#include "omp.h"
+
+
 #define MAX_N 1001
 
 using namespace std;
@@ -49,7 +52,11 @@ Acorde a los score en matchs, mismatches y gaps
 */
 inline int needleman_wunsch()
 {
+    
+    #pragma omp parallel for
     for (int i=0;i<=n;i++) dp[i][0] = dp[0][i] = -i * gap_score;
+    
+    //#pragma omp parallel for
     for (int i=1;i<=n;i++)
     {
         for (int j=1;j<=m;j++)
@@ -119,7 +126,6 @@ inline pair<string, string> get_optimal_alignment()
     return make_pair(retA, retB);
 }
 
-
 inline void nw(){
 
     match_score = 1, mismatch_score = 1, gap_score = 1; // Constants de score quemadas
@@ -137,15 +143,13 @@ inline void nw(){
 
 }
 
-
-
 int main()
 {
 
     clock_t start = clock();
-    
+
     nw();
-    
+
     printf("Time elapsed: %.6fs \n", (double)(clock() - start) / CLOCKS_PER_SEC);
 
     return 0;
