@@ -56,15 +56,17 @@ inline int needleman_wunsch()
     #pragma omp parallel for
     for (int i=0;i<=n;i++) dp[i][0] = dp[0][i] = -i * gap_score;
     
-    //#pragma omp parallel for
-    for (int i=1;i<=n;i++)
+    #pragma omp parallel for 
+    for (int j=-m ; j<=n ;j++)
     {
-        for (int j=1;j<=m;j++)
+        for (int i=max(1,j) ; i<=min(n, j+m ) ; i++)
         {
-            int S = (A[i-1] == B[j-1]) ? match_score : -mismatch_score;
-            dp[i][j] = max(dp[i-1][j-1] + S, max(dp[i-1][j] - gap_score, dp[i][j-1] - gap_score));
+            int j1 = i-j;
+            int S = (A[i-1] == B[j1-1]) ? match_score : -mismatch_score;
+            dp[i][j1] = max(dp[i-1][j1-1] + S, max(dp[i-1][j1] - gap_score, dp[i][j1-1] - gap_score));
         }
     }
+
     /* print_matrix(); */
     return dp[n][m];
 }
