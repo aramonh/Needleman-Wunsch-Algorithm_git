@@ -124,8 +124,11 @@ inline void nw(){
 
     match_score = 1, mismatch_score = 1, gap_score = 1; // Constants de score quemadas
 
-    A = "AGGGCT";
-    B = "AGGCA";
+    //A = "AGGGCT";
+    //B = "AGGCA";
+    A = "CGATGCTAGCGTATCGTAGTCTATCGTAC";
+    B = "ACGATGCTAGCGTTTCGTATCATCGTA";
+
 	n = A.length(); // length of gene1
 	m = B.length(); // length of gene2
 	
