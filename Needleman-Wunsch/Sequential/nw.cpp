@@ -19,7 +19,8 @@
 #include <map>
 #include <complex>
 
-#define MAX_N 1001
+
+#define MAX_N 10001
 
 using namespace std;
 
@@ -34,12 +35,13 @@ int dp[MAX_N][MAX_N];
  Complexity: O(n * m) time, O(n * m) memory
 */
 
-void print_matrix()
+void print_matrix(int matrix[][MAX_N], int n, int m)
 {
     for(int loop = 0; loop < n; loop++){
         for(int loop2 = 0; loop2 < m; loop2++){
-            printf("%d ", dp[loop][loop2]);
+            printf(" %d ", matrix[loop][loop2]);
         }
+        printf("\n");
     }
 }
 
@@ -49,16 +51,20 @@ Acorde a los score en matchs, mismatches y gaps
 */
 inline int needleman_wunsch()
 {
+    
     for (int i=0;i<=n;i++) dp[i][0] = dp[0][i] = -i * gap_score;
-    for (int i=1;i<=n;i++)
+
+    for (int j=-m ; j<=n ;j++)
     {
-        for (int j=1;j<=m;j++)
+        for (int i=max(1,j) ; i<=min(n, j+m ) ; i++)
         {
-            int S = (A[i-1] == B[j-1]) ? match_score : -mismatch_score;
-            dp[i][j] = max(dp[i-1][j-1] + S, max(dp[i-1][j] - gap_score, dp[i][j-1] - gap_score));
+          
+            int j1 = i-j;
+            int S = (A[i-1] == B[j1-1]) ? match_score : -mismatch_score;
+            dp[i][j1] = max(dp[i-1][j1-1] + S, max(dp[i-1][j1] - gap_score, dp[i][j1-1] - gap_score));
         }
     }
-    /* print_matrix(); */
+
     return dp[n][m];
 }
 
@@ -119,18 +125,15 @@ inline pair<string, string> get_optimal_alignment()
     return make_pair(retA, retB);
 }
 
-
 inline void nw(){
 
     match_score = 1, mismatch_score = 1, gap_score = 1; // Constants de score quemadas
 
-    //A = "AGGGCT";
-    //B = "AGGCA";
     A = "CGATGCTAGCGTATCGTAGTCTATCGTAC";
     B = "ACGATGCTAGCGTTTCGTATCATCGTA";
 
-	n = A.length(); // length of gene1
-	m = B.length(); // length of gene2
+    n = A.length(); // length of gene1
+  	m = B.length(); // length of gene2
 	
     needleman_wunsch();
     pair<string, string> alignment = get_optimal_alignment();
@@ -140,15 +143,11 @@ inline void nw(){
 
 }
 
-
-
 int main()
 {
 
     clock_t start = clock();
-    
     nw();
-    
     printf("Time elapsed: %.6fs \n", (double)(clock() - start) / CLOCKS_PER_SEC);
 
     return 0;

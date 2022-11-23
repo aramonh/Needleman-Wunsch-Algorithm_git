@@ -159,7 +159,7 @@ int main(){
         //print_matrix(matriz, n , m );
         pair<string, string> alignment = get_optimal_alignment();
 
-        printf("\n %s \n %s \n", alignment.first.c_str(), alignment.second.c_str());
+        printf("\n 1. %s \n  2. %s \n", alignment.first.c_str(), alignment.second.c_str());
 
 	}
 
